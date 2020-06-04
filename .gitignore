@@ -1,0 +1,4 @@
+# Project exclude paths
+/venv/
+/dataset/
+/48k/
