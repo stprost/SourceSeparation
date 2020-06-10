@@ -1,4 +1,4 @@
 # Project exclude paths
 /venv/
-/dataset/
-/48k/
+/src/rnn_model/dataset/
+/src/rnn_model/48k/
