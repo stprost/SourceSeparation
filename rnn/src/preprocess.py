@@ -1,6 +1,6 @@
 import librosa
 import numpy as np
-from config import ModelConfig
+from rnn.src.config import ModelConfig
 import soundfile as sf
 
 
@@ -26,8 +26,6 @@ def to_wav_from_spec(stft_maxrix, len_hop=ModelConfig.L_HOP):
 
 
 def to_wav_mag_only(mag, init_phase, len_frame=ModelConfig.L_FRAME, len_hop=ModelConfig.L_HOP, num_iters=50):
-    # return np.array(list(map(lambda m_p: griffin_lim(m, len_frame, len_hop, num_iters=num_iters, phase_angle=p)[0],
-    # list(zip(mag, init_phase))[1])))
     return np.array(list(map(lambda m: lambda p: griffin_lim(m, len_frame, len_hop, num_iters=num_iters, phase_angle=p),
                              list(zip(mag, init_phase))[1])))
 
@@ -102,7 +100,6 @@ def _sample_range(wav, sr, duration):
 
 
 def batch_to_spec(src, num_wav):
-    # shape = (batch_size, n_frames, n_freq) => (batch_size, n_freq, n_frames)
     batch_size, seq_len, freq = src.shape
     src = np.reshape(src, (num_wav, -1, freq))
     src = src.transpose(0, 2, 1)

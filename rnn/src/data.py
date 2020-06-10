@@ -1,8 +1,11 @@
 import random
 from os import walk
-from config import ModelConfig
-from preprocess import get_random_wav, to_spectrogram, get_magnitude, spec_to_batch
-from config import TrainConfig
+
+import librosa
+
+from rnn.src.config import ModelConfig
+from rnn.src.preprocess import get_random_wav, to_spectrogram, get_magnitude, spec_to_batch
+from rnn.src.config import TrainConfig
 
 
 class Data:
@@ -24,3 +27,7 @@ class Data:
         wav_mag = get_magnitude(wav_spec)
         wav_batch, _ = spec_to_batch(wav_mag)
         return wav_batch
+
+if __name__ == "__main__":
+    wav = librosa.load("../dataset/mix/3.wav", sr=8000, mono=False)
+    print("end")

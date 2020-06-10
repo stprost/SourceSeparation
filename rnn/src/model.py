@@ -1,9 +1,9 @@
 import numpy as np
 import keras
-from mask_layer import MaskLayer
+from rnn.src.mask_layer import MaskLayer
 from keras import layers
 
-from config import ModelConfig
+from rnn.src.config import ModelConfig
 
 
 def build_model_gru_cell():
@@ -36,8 +36,8 @@ def build_model_gru():
     src2_pre = layers.Dense(input_size, activation="relu")(x)
 
     # time-freq masking layer
-    src1 = MaskLayer()([src1_pre, src2_pre, inputs])
-    src2 = MaskLayer()([src2_pre, src1_pre, inputs])
+    src1 = MaskLayer(name="src1")([src1_pre, src2_pre, inputs])
+    src2 = MaskLayer(name="src2")([src2_pre, src1_pre, inputs])
 
     model = keras.Model(
         inputs=inputs,
@@ -45,5 +45,5 @@ def build_model_gru():
         name="GRU_model"
     )
     model.summary()
-    keras.utils.plot_model(model, "model.png", show_shapes=True)
+    # keras.utils.plot_model(model, "model.png", show_shapes=True)
     return model
