@@ -1,5 +1,8 @@
 import os
+
+import librosa
 import numpy as np
+import wavio
 from librosa import load
 from librosa.output import write_wav
 from librosa.util import fix_length
@@ -37,8 +40,12 @@ class Separator():
 
         write_wav(os.path.join(self.output_dir, 's1', file_name + '.wav'), \
                   speaker_signals[0, :], self.samplerate_hz, norm=True)
+        wav, _ = np.array(librosa.load(os.path.join(self.output_dir, 's1', file_name + '.wav'), 22050))
+        wavio.write(os.path.join(self.output_dir, 's1', file_name + '.wav'), wav, 22050, sampwidth=3)
         write_wav(os.path.join(self.output_dir, 's2', file_name + '.wav'), \
                   speaker_signals[1, :], self.samplerate_hz, norm=True)
+        wav, _ = np.array(librosa.load(os.path.join(self.output_dir, 's2', file_name + '.wav'), 22050))
+        wavio.write(os.path.join(self.output_dir, 's2', file_name + '.wav'), wav, 22050, sampwidth=3)
 
     def process_file_list(self, wav_file_list):
         wav_list = text_file_2_list(wav_file_list)

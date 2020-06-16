@@ -26,7 +26,7 @@ def write_mono(path, wav_1, wav_2):
     wav = np.expand_dims(wav, axis=0)
     wav = np.reshape(wav, (2, -1))
     wav_mono = librosa.to_mono(wav)
-    write(path, 22050, wav_mono)
+    write(path, 16000, wav_mono)
 
 
 def generate(num, path_input, path_output):
@@ -92,6 +92,10 @@ if __name__ == "__main__":
     #     write("dataset/mix/{}.wav".format(i), 16000, mixed_wav[i])
     # generate(1, "48k/male", "dataset/test/m_m")
     # generate(1, "48k/female", "dataset/test/f_f")
-    generate_m_f(0, 5, "../48k/male", "48k/female", "ds/tr")
-    generate_m_f(5, 7, "../48k/male", "48k/female", "ds/cv")
-    generate_m_f(7, 9, "../48k/male", "48k/female", "ds/tt")
+    # generate_m_f(0, 5, "../48k/male", "48k/female", "ds/tr")
+    # generate_m_f(5, 7, "../48k/male", "48k/female", "ds/cv")
+    # generate_m_f(7, 9, "../48k/male", "48k/female", "ds/tt")
+    data = Data("../../dataset/train/m_m")
+    mixed_wav, src1_wav, src2_wav = data.next_wavs(1)
+    write_mono("../../dual_path_rnn/input/mix_m_m.wav", src1_wav, src2_wav)
+    print("")
