@@ -25,10 +25,10 @@ NETWORK_NUM_DPRNN_BLOCKS = 3
 NETWORK_CHUNK_SIZE = 256
 
 
-def separate_audio(filename):
+def separate_audio(input_path, filename):
     separate_max_num_full_chunks = SAMPLERATE_HZ * SEPARATE_MAX_UTTERANCE_LENGTH_IN_SECONDS // NETWORK_CHUNK_SIZE
     tasnet = TasnetWithDprnn(batch_size=BATCH_SIZE,
-                             model_weights_file="../weights/default/state_epoch_8.h5",
+                             model_weights_file="../exp_m_m/default/state_epoch_8.h5",
                              num_filters_in_encoder=NETWORK_NUM_FILTERS_IN_ENCODER,
                              encoder_filter_length=NETWORK_ENCODER_FILTER_LENGTH,
                              chunk_size=NETWORK_CHUNK_SIZE,
@@ -38,7 +38,7 @@ def separate_audio(filename):
                              samplerate_hz=SAMPLERATE_HZ)
 
     separator = Separator(tasnet=tasnet,
-                          input_dir="../input",
+                          input_dir=input_path,
                           output_dir="../output",
                           max_num_chunks=separate_max_num_full_chunks)
     separator.process_single_file(filename)
@@ -51,9 +51,16 @@ def recognize(path):
         audio = r.record(source)
     try:
         s = r.recognize_google(audio)
-        print("Text: " + s)
+        return s
     except Exception as e:
         print("Exception: " + str(e))
+
+
+def get_text(path, filename):
+    separate_audio(path, filename)
+    text_1 = recognize(os.path.join('../output', 's1', filename + '.wav'))
+    text_2 = recognize(os.path.join('../output', 's2', filename + '.wav'))
+    return text_1, text_2
 
 
 if __name__ == "__main__":

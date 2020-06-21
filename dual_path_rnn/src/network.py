@@ -126,5 +126,5 @@ class TasnetWithDprnn():
         model = keras.Model(inputs=network_input, outputs=decoded)
         if not self.model_weights_file == None:
             model.load_weights(self.model_weights_file)
-            print('Loaded weights from', self.model_weights_file)
+            print('Loaded exp_m_m from', self.model_weights_file)
         return model
